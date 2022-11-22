@@ -1,0 +1,1 @@
+Argos,perro,0;nagini,boa,1;Sasha,perro,2;Micho,gato,2

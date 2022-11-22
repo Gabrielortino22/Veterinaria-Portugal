@@ -1,6 +1,7 @@
 import Paciente from "./Paciente";
 import Cliente from "./Cliente";
 import * as readlineSync from 'readline-Sync';
+import GestorDeArchivos from './gestorDeArchivos';
 
 export default class Sucursal{
     private nombre: string;
@@ -40,6 +41,7 @@ export default class Sucursal{
         console.log(this.listaDeClientes);
     };
 
+    //En vez de introducir el id introducimos el indice del dueno asi automaticamente actualiza el numero de visitas y comprueba si es VIP
     public altaPaciente(){
         let nombre: string = readlineSync.question("Ingrese el nombre del paciente: ");
         let especie: string;
@@ -51,14 +53,14 @@ export default class Sucursal{
             especie = "gato";
         }
         else{
-            especie = `exotica (${respuesta.toLocaleLowerCase})`;
+            especie = `exotica (${respuesta})`;
         };
-        let cliente: Cliente = this.listaDeClientes[readlineSync.question("Ingrese la pocision del dueño: ")];
+        let cliente: Cliente = this.listaDeClientes[readlineSync.question("Ingrese la pocision del dueno: ")];
         let dueno: number = cliente.id;
         let nuevoPaciente: Paciente = new Paciente(nombre,especie,dueno);
         this.listaDePacientes.push(nuevoPaciente);
-        cliente.numeroDeVisitas = numeroDeVisitas + 1;
-        cliente.comprobarVIP();
+        cliente.numeroDeVisitas = cliente.numeroDeVisitas + 1;
+        cliente.comprobarVip();
     };
     public bajaPaciente(){
         let pocision: number = Number(readlineSync.question("Ingrese la pocision del paciente que desea eliminar:"));
@@ -76,7 +78,7 @@ export default class Sucursal{
             especie = "gato";
         }
         else{
-            especie = `exotica (${respuesta.toLocaleLowerCase})`;
+            especie = `exotica (${respuesta})`;
         };
         this.listaDePacientes[pocision].especie = especie;
     };
@@ -84,6 +86,7 @@ export default class Sucursal{
         console.log(this.listaDePacientes);
     };
 
+    //Este metodo es una especie de menu para llamar otros metodos
     public ejecutar(){
         while(this.entrada !== 0){
             this.entrada = Number(readlineSync.question("<VETERINARIAS LISBOA> Ingrese un numero para... Clientes: 1 ver, 2 agregar, 3 editar, 4 borrar. Pacientes: 5 ver, 6 agregar, 7 editar, 8 borrar. 0 para salir."));
@@ -119,7 +122,7 @@ export default class Sucursal{
             };
         };
     };
-    public generarId(){
+    public generarId(): number{
         //el primer 10000 es para asegurarse de que el id empieze en 1
         let id: number = 10000 + Math.floor(Math.random() * 10000);
         let idValidada: boolean = false;
@@ -140,4 +143,35 @@ export default class Sucursal{
         };
         return id;
     };
-}
+    public cargarClientes(){
+        let datos: GestorDeArchivos = new GestorDeArchivos("datosClientes.txt");        
+
+        for (let i: number = 0; i < datos.getArregloString().length; i++) {
+            let atributosCliente = datos.getArregloString()[i].split(',')
+            let nombre: string = atributosCliente[0];
+            let telefono: number = Number(atributosCliente[1]);
+            let id: number = this.generarId();
+            let nuevoCliente = new Cliente(nombre,telefono,id);
+            this.listaDeClientes.push(nuevoCliente);
+            };
+    };
+    public cargarPacientes(){
+        let datos: GestorDeArchivos = new GestorDeArchivos("datosPacientes.txt");        
+
+        for (let i: number = 0; i < datos.getArregloString().length; i++) {
+            let atributosPaciente = datos.getArregloString()[i].split(',')
+            let nombre: string = atributosPaciente[0];
+            let especie: string = atributosPaciente[1];
+            let IndiceDueno: number = Number(atributosPaciente[2]);
+            let nuevoPaciente = new Paciente(nombre,especie,IndiceDueno);
+            this.listaDePacientes.push(nuevoPaciente);
+            this.listaDeClientes[IndiceDueno].numeroDeVisitas = this.listaDeClientes[IndiceDueno].numeroDeVisitas + 1;
+            this.listaDeClientes[IndiceDueno].comprobarVip();
+            };
+    };
+};
+
+let SucursalAyacucho: Sucursal = new Sucursal("Coimbra","San Martin 1230",214124);
+SucursalAyacucho.cargarClientes();
+SucursalAyacucho.cargarPacientes();
+SucursalAyacucho.ejecutar();
