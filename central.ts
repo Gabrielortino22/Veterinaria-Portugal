@@ -88,7 +88,7 @@ public cargarProovedores(listaProovedores: Array<Proovedor> ,proovedor:string) :
 }
  public bajaProovedor() {
     for (let i : number =0; i < this.listaProovedores.length; i++){  
-        if (id == this.listaProovedores[i].getId()){
+        if (this.generarId() == this.listaProovedores[i].getId()){
             this.listaProovedores.splice(i, 1);
             console.log("El proovedor ha sido eliminado");
         }
