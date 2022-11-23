@@ -4,9 +4,11 @@ import Proovedor from "./Proovedor"
 class Central {
     private listaSucursales:Array<Sucursal>;
     private listaProovedores:Array<Proovedor>;
+    private entrada:number;
     public constructor (listaSucursales:Array<Sucursal>, listaProovedores:Array<Proovedor>){
       this.listaSucursales = listaSucursales;
       this.listaProovedores = listaProovedores;  
+
     }
     public getlistaSucursales(){
         return this.listaSucursales
@@ -19,7 +21,7 @@ class Central {
 
 
 //FUNCIONES PARA SUCURSALES
-public function cargarSucursales(listaSucursales: Array<Sucursal> ,sucursal:string) : Array<Sucursal>{
+public  cargarSucursales(listaSucursales: Array<Sucursal> ,sucursal:string) : Array<Sucursal>{
     let datos: string[]  = sucursal.split(',');
    let nombre : string = datos[0];
    let direccion: string = datos[1]
@@ -31,16 +33,16 @@ public function cargarSucursales(listaSucursales: Array<Sucursal> ,sucursal:stri
     return listaSucursales;
 }
 
-function borrarSucursal(listaSucursales: Array<Sucursal>, id:number) {
-    for (let i : number =0; i < listaSucursales.length; i++){  
-        if (id == listaSucursales[i].getId()){
-            listaSucursales.splice(i, 1);
+public bajaSucursal() {
+    for (let i : number =0; i < this.listaSucursales.length; i++){  
+        if (this.generarId() == this.listaSucursales[i].getId()){
+            this.listaSucursales.splice(i, 1);
             console.log("La sucursal ha sido eliminada");
         }
     }
 }
 
-function altaSucursal(listaSucursales: Array<Sucursal>){
+public altaSucursal(){
 
     let nombre : string = ReadlineSync.question("Ingrese el nombre de la sucursal: ");
     let direccion:string = ReadlineSync.question("Ingrese la direccion de la sucursal:")
@@ -49,12 +51,12 @@ function altaSucursal(listaSucursales: Array<Sucursal>){
 
     let nuevaSucursal : Sucursal = new Sucursal(nombre, direccion, id);
 
-    listaSucursales.push(nuevaSucursal);
+    this.listaSucursales.push(nuevaSucursal);
 
-    console.log(listaSucursales);
+    console.log(this.listaSucursales);
 }
 
-function modificarSucursal(listaSucursales:Array<Sucursal>, posicion: number ){
+public modificarSucursal(){
    
     let nombre: string = ReadlineSync.question("Ingrese el nombre modificado: ");
     let id : number = ReadlineSync.questionInt("Ingrese la nueva id: ");
@@ -62,13 +64,18 @@ function modificarSucursal(listaSucursales:Array<Sucursal>, posicion: number ){
 
     let sucursalModificada : Sucursal = new Sucursal(nombre, direccion, id);
 
-    delete listaSucursales[posicion];
-    listaSucursales[posicion] = sucursalModificada;
+    delete this.listaSucursales[posicion];
+    this.listaSucursales[posicion] = sucursalModificada;
 
-    console.log(listaSucursales);
+    console.log(this.listaSucursales);
 }
+    public verSucursal(){
+        console.log(this.listaSucursales)
+    }
+
+
 //FUNCIONES PARA PROOVEDORES
-function cargarProovedores(listaProovedores: Array<Proovedor> ,proovedor:string) : Array<Proovedor>{
+public cargarProovedores(listaProovedores: Array<Proovedor> ,proovedor:string) : Array<Proovedor>{
     let datos: string[]  = proovedor.split(',');
    let nombre : string = datos[0];
    let telefono: number = Number(datos[1]);
@@ -79,30 +86,33 @@ function cargarProovedores(listaProovedores: Array<Proovedor> ,proovedor:string)
 
     return listaProovedores;
 }
- function borrarProovedor(listaProovedores: Array<Proovedor>, id:number) {
-    for (let i : number =0; i < listaProovedores.length; i++){  
-        if (id == listaProovedores[i].getId()){
-            listaProovedores.splice(i, 1);
+ public bajaProovedor() {
+    for (let i : number =0; i < this.listaProovedores.length; i++){  
+        if (id == this.listaProovedores[i].getId()){
+            this.listaProovedores.splice(i, 1);
             console.log("El proovedor ha sido eliminado");
         }
     }
 }
 
-function altaProovedor(listaProovedores: Array<Proovedor>){
+public altaProovedor(){
 
     let nombre : string = ReadlineSync.question("Ingrese el nombre del proovedor: ");
     let telefono:number = ReadlineSync.question("Ingrese el telefono del proovedor:")
-    let id: number = this.generarId;
+    let id: number = this.generarId();
      
 
     let nuevoProovedor : Proovedor = new Proovedor(nombre, telefono, id);
 
-    listaProovedores.push(nuevoProovedor);
+    this.listaProovedores.push(nuevoProovedor);
 
     console.log(this.listaProovedores);
 }
+public verProovedores(){
+    console.log(this.listaProovedores)
+}
 
-function modificarProovedor(listaProovedores:Array<Proovedor>, posicion: number ){
+public modificarProovedor() {
    
     let nombre: string = ReadlineSync.question("Ingrese el nombre del proovedor modificado: ");
     let id : number = ReadlineSync.questionInt("Ingrese la nueva id: ");
@@ -110,12 +120,12 @@ function modificarProovedor(listaProovedores:Array<Proovedor>, posicion: number 
 
     let proovedorModificado : Proovedor = new Proovedor(nombre, telefono, id);
 
-    delete listaProovedores[posicion];
-    listaProovedores[posicion] = proovedorModificado;
+    delete this.listaProovedores[posicion];
+    this.listaProovedores[posicion] = proovedorModificado;
 
     console.log(this.listaProovedores);
 }
-public function generarId(){
+public  generarId(){
     //el primer 10000 es para asegurarse de que el id empieze en 1
     let id: number = 20000 + Math.floor(Math.random() * 20000);
     let idValidada: boolean = false;
@@ -136,8 +146,8 @@ public function generarId(){
     };
     return id;
 };
-};
-public function ejecutar(){
+
+public  ejecutar(){
     while(this.entrada !== 0){
         this.entrada = Number(ReadlineSync.question("<VETERINARIAS LISBOA> Ingrese un numero para... Sucursales: 1 ver, 2 agregar, 3 editar, 4 borrar. Pacientes: 5 ver, 6 agregar, 7 editar, 8 borrar. 0 para salir."));
         switch (this.entrada){
@@ -172,4 +182,4 @@ public function ejecutar(){
         };
     };
 };
-
+};
