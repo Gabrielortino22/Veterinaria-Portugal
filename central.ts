@@ -58,20 +58,19 @@ public altaSucursal(){
 
 public modificarSucursal(){
    
-    let nombre: string = ReadlineSync.question("Ingrese el nombre modificado: ");
-    let id : number = ReadlineSync.questionInt("Ingrese la nueva id: ");
-    let direccion:string=ReadlineSync.question("Ingrese la nueva direccion:") 
+       let posicion: number = Number(ReadlineSync.question("Ingrese la posicion de la sucursal que desea modificar:"));
+       this.listaSucursales[posicion].nombre = ReadlineSync.question("Ingrese el nuevo nombre de la sucursal: ");
+        this.listaSucursales[posicion].direccion = Number(ReadlineSync.question("Ingrese la nueva direccion de la sucursal: "));
+        let respuesta: string = ReadlineSync.question("Si desea generar una nueva ID ingrese 'si': ");
+        if (respuesta.toLocaleLowerCase() === "si"){
+            this.listaSucursales[posicion].id = this.generarId();
+        }
+    };
+     
 
-    let sucursalModificada : Sucursal = new Sucursal(nombre, direccion, id);
-
-    delete this.listaSucursales[posicion];
-    this.listaSucursales[posicion] = sucursalModificada;
-
-    console.log(this.listaSucursales);
-}
     public verSucursal(){
         console.log(this.listaSucursales)
-    }
+    };
 
 
 //FUNCIONES PARA PROOVEDORES
@@ -113,18 +112,15 @@ public verProovedores(){
 }
 
 public modificarProovedor() {
-   
-    let nombre: string = ReadlineSync.question("Ingrese el nombre del proovedor modificado: ");
-    let id : number = ReadlineSync.questionInt("Ingrese la nueva id: ");
-    let telefono:number=ReadlineSync.questionInt("Ingrese el nuevo telefono:") 
-
-    let proovedorModificado : Proovedor = new Proovedor(nombre, telefono, id);
-
-    delete this.listaProovedores[posicion];
-    this.listaProovedores[posicion] = proovedorModificado;
-
-    console.log(this.listaProovedores);
-}
+    let posicion: number = Number(ReadlineSync.question("Ingrese la posicion del prooveedor que desea modificar:"));
+       this.listaProovedores[posicion].nombre = ReadlineSync.question("Ingrese el nuevo nombre del proovedor: ");
+        this.listaProovedores[posicion].telefono = Number(ReadlineSync.question("Ingrese el nuevo telefono del proovedor: "));
+        let respuesta: string = ReadlineSync.question("Si desea generar una nueva ID ingrese 'si': ");
+        if (respuesta.toLocaleLowerCase() === "si"){
+            this.listaProovedores[posicion].id = this.generarId();
+        }
+    };
+     
 public  generarId(){
     //el primer 10000 es para asegurarse de que el id empieze en 1
     let id: number = 20000 + Math.floor(Math.random() * 20000);
