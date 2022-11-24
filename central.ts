@@ -1,6 +1,8 @@
 import * as ReadlineSync from 'readline-sync';
-import Sucursal from "./Sucursal"
-import Proovedor from "./Proovedor"
+import Sucursal from "./Sucursal";
+import Proovedor from "./Proovedor";
+import GestorDeArchivos from './gestorDeArchivos';
+
 class Central {
     private listaSucursales:Array<Sucursal>;
     private listaProovedores:Array<Proovedor>;
@@ -21,18 +23,21 @@ class Central {
 
 
 //FUNCIONES PARA SUCURSALES
-public  cargarSucursales(listaSucursales: Array<Sucursal> ,sucursal:string) : Array<Sucursal>{
-    let datos: string[]  = sucursal.split(',');
-   let nombre : string = datos[0];
-   let direccion: string = datos[1]
-   let id : number = Number(datos[2]);
+public  cargarSucursales(){
+    
+        let datos: GestorDeArchivos = new GestorDeArchivos("datosSucursal.txt");        
+      
+          for (let i: number = 0; i < datos.getArregloString().length; i++) {
+              let atributosSucursales = datos.getArregloString()[i].split(',')
+              let nombre: string = atributosSucursales[0];
+              let direccion:string =atributosSucursales[1];
+              let id: number = Number(atributosSucursales[2]);
 
-    let nuevaSucursal : Sucursal = new Sucursal(nombre, direccion, id);
-    listaSucursales.push(nuevaSucursal);
-
-    return listaSucursales;
-}
-
+              let nuevaSucursal : Sucursal = new Sucursal(nombre, direccion, id);
+            this.listaSucursales.push(nuevaSucursal);
+              };
+      };
+    
 public bajaSucursal() {
     for (let i : number =0; i < this.listaSucursales.length; i++){  
         if (this.generarId() == this.listaSucursales[i].getId()){
@@ -47,10 +52,7 @@ public altaSucursal(){
     let nombre : string = ReadlineSync.question("Ingrese el nombre de la sucursal: ");
     let direccion:string = ReadlineSync.question("Ingrese la direccion de la sucursal:")
     let id: number = this.generarId();
-      
-
     let nuevaSucursal : Sucursal = new Sucursal(nombre, direccion, id);
-
     this.listaSucursales.push(nuevaSucursal);
 
     console.log(this.listaSucursales);
@@ -74,17 +76,22 @@ public modificarSucursal(){
 
 
 //FUNCIONES PARA PROOVEDORES
-public cargarProovedores(listaProovedores: Array<Proovedor> ,proovedor:string) : Array<Proovedor>{
-    let datos: string[]  = proovedor.split(',');
-   let nombre : string = datos[0];
-   let telefono: number = Number(datos[1]);
-   let id : number = Number(datos[2]);
+public cargarProovedores(){
+  let datos: GestorDeArchivos = new GestorDeArchivos("datosProovedores.txt");        
 
-    let nuevoProovedor : Proovedor = new Proovedor(nombre, telefono, id);
-   listaProovedores.push(nuevoProovedor);
+    for (let i: number = 0; i < datos.getArregloString().length; i++) {
+        let atributosProovedores = datos.getArregloString()[i].split(',')
+        let nombre: string = atributosProovedores[0];
+        let telefono: number = Number(atributosProovedores[1]);
+        let id: number = Number(atributosProovedores[2]);
+         
+        let nuevoProovedor : Proovedor = new Proovedor(nombre, telefono, id);
+        this.listaProovedores.push(nuevoProovedor);  
+        };
+};
 
-    return listaProovedores;
-}
+    
+
  public bajaProovedor() {
     for (let i : number =0; i < this.listaProovedores.length; i++){  
         if (this.generarId() == this.listaProovedores[i].getId()){
@@ -99,10 +106,7 @@ public altaProovedor(){
     let nombre : string = ReadlineSync.question("Ingrese el nombre del proovedor: ");
     let telefono:number = ReadlineSync.question("Ingrese el telefono del proovedor:")
     let id: number = this.generarId();
-     
-
     let nuevoProovedor : Proovedor = new Proovedor(nombre, telefono, id);
-
     this.listaProovedores.push(nuevoProovedor);
 
     console.log(this.listaProovedores);
