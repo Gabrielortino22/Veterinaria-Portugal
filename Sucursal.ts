@@ -38,7 +38,11 @@ export default class Sucursal{
         }
     };
     public verClientes(){
-        console.log(this.listaDeClientes);
+        for(let i = 0; i < this.listaDeClientes.length; i++){
+            if(isNaN(this.listaDeClientes[i].id) === false){
+                console.log(`ID: ${this.listaDeClientes[i].id}; Nombre: ${this.listaDeClientes[i].nombre};  Telefono: ${this.listaDeClientes[i].telefono};  Visitas: ${this.listaDeClientes[i].numeroDeVisitas};    VIP: ${this.listaDeClientes[i].esVip};`);
+            };
+        };
     };
 
     //En vez de introducir el id introducimos el indice del dueno asi automaticamente actualiza el numero de visitas y comprueba si es VIP
@@ -83,7 +87,11 @@ export default class Sucursal{
         this.listaDePacientes[pocision].especie = especie;
     };
     public verPacientes(){
-        console.log(this.listaDePacientes);
+        for(let i = 0; i < this.listaDePacientes.length; i++){
+            if(isNaN(this.listaDePacientes[i].dueno) === false){
+                console.log(`Dueno: ${this.listaDePacientes[i].dueno};  Nombre: ${this.listaDePacientes[i].nombre};  Especie: ${this.listaDePacientes[i].especie}`);
+            };
+        };
     };
 
     //Este metodo es una especie de menu para llamar otros metodos

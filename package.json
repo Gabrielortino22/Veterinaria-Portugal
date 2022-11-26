@@ -1,0 +1,25 @@
+{
+  "name": "veterinaria-portugal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gabrielortino22/Veterinaria-Portugal.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gabrielortino22/Veterinaria-Portugal/issues"
+  },
+  "homepage": "https://github.com/Gabrielortino22/Veterinaria-Portugal#readme",
+  "dependencies": {
+    "@types/node": "^18.11.9",
+    "fs": "^0.0.1-security",
+    "fs-extra": "^10.1.0",
+    "readline-sync": "^1.4.10"
+  }
+}
