@@ -1,5 +1,5 @@
 import Paciente from "./Paciente";
-import Cliente from "./Cliente";
+import Cliente from './Cliente';
 import * as readlineSync from 'readline-Sync';
 import GestorDeArchivos from './gestorDeArchivos';
 
@@ -25,28 +25,50 @@ export default class Sucursal{
         this.listaDeClientes.push(nuevoCliente);
     };
     public bajaCliente(){
-        let pocision: number = Number(readlineSync.question("Ingrese la pocision del cliente que desea eliminar:"));
-        delete this.listaDeClientes[pocision];
+        let id: number = Number(readlineSync.question("Ingrese el ID del cliente que desea borrar: "));
+        let idValidada: boolean = false;
+        for(let i = 0; i < this.listaDeClientes.length; i++){
+            if(id === this.listaDeClientes[i].id){
+                idValidada = true;
+                this.listaDeClientes.splice(i,1);
+                console.log("Cliente eliminado del sistema.");
+                break;
+            };
+        };
+        if(idValidada === false){
+            console.log("El ID introducido no existe.");            
+        };
     };
     public modificarCliente(){
-        let pocision: number = Number(readlineSync.question("Ingrese la pocision del cliente que desea modificar:"));
-        this.listaDeClientes[pocision].nombre = readlineSync.question("Ingrese el nuevo nombre del cliente: ");
-        this.listaDeClientes[pocision].telefono = Number(readlineSync.question("Ingrese el nuevo telefono del cliente: "));
-        let respuesta: string = readlineSync.question("Si desea generar una nueva ID ingrese 'si': ");
-        if (respuesta.toLocaleLowerCase() === "si"){
-            this.listaDeClientes[pocision].id = this.generarId();
-        }
+        let id: number = Number(readlineSync.question("Ingrese el ID del cliente que desea modificar: "));
+        let idValidada: boolean = false;
+        for(let i = 0; i < this.listaDeClientes.length; i++){
+            if(id === this.listaDeClientes[i].id){
+                idValidada = true;
+                this.listaDeClientes[i].nombre = readlineSync.question("Ingrese el nuevo nombre del cliente: ");
+                this.listaDeClientes[i].telefono = Number(readlineSync.question("Ingrese el nuevo telefono del cliente: "));
+                let respuesta: string = readlineSync.question("Si desea generar una nueva ID ingrese 'si': ");
+                if (respuesta.toLocaleLowerCase() === "si"){
+                    this.listaDeClientes[i].id = this.generarId();
+                };
+                console.log("Cliente modificado.");
+                break;
+            };
+        };
+        if(idValidada === false){
+            console.log("El ID introducido no existe.");            
+        };
     };
     public verClientes(){
         for(let i = 0; i < this.listaDeClientes.length; i++){
             if(isNaN(this.listaDeClientes[i].id) === false){
-                console.log(`ID: ${this.listaDeClientes[i].id}; Nombre: ${this.listaDeClientes[i].nombre};  Telefono: ${this.listaDeClientes[i].telefono};  Visitas: ${this.listaDeClientes[i].numeroDeVisitas};    VIP: ${this.listaDeClientes[i].esVip};`);
+                console.log(`ID: ${this.listaDeClientes[i].id};   Nombre: ${this.listaDeClientes[i].nombre};  Telefono: ${this.listaDeClientes[i].telefono};  Visitas: ${this.listaDeClientes[i].numeroDeVisitas};    VIP: ${this.listaDeClientes[i].esVip};`);
             };
         };
     };
 
-    //En vez de introducir el id introducimos el indice del dueno asi automaticamente actualiza el numero de visitas y comprueba si es VIP
     public altaPaciente(){
+        let id: number = this.generarIdPaciente();
         let nombre: string = readlineSync.question("Ingrese el nombre del paciente: ");
         let especie: string;
         let respuesta: string = readlineSync.question("Ingrese la especie del paciente: ");
@@ -57,39 +79,78 @@ export default class Sucursal{
             especie = "gato";
         }
         else{
-            especie = `exotica (${respuesta})`;
+            especie = `exotica(${respuesta})`;
         };
-        let cliente: Cliente = this.listaDeClientes[readlineSync.question("Ingrese la pocision del dueno: ")];
-        let dueno: number = cliente.id;
-        let nuevoPaciente: Paciente = new Paciente(nombre,especie,dueno);
+        let dueno: number = Number(readlineSync.question("Ingrese el ID del dueno: "));
+        let duenoValidado: boolean = false;
+        while(duenoValidado === false){
+            for(let i = 0; i < this.listaDeClientes.length; i++){
+                if(dueno === this.listaDeClientes[i].id){
+                    this.listaDeClientes[i].numeroDeVisitas = this.listaDeClientes[i].numeroDeVisitas + 1;
+                    this.listaDeClientes[i].comprobarVip();
+                    duenoValidado = true;
+                };
+            };
+            if(duenoValidado === false){
+                dueno = Number(readlineSync.question("ID invalida, ingrese la ID nuevamente: "));
+            };
+        };
+        let nuevoPaciente: Paciente = new Paciente(nombre,especie,dueno,id);
         this.listaDePacientes.push(nuevoPaciente);
-        cliente.numeroDeVisitas = cliente.numeroDeVisitas + 1;
-        cliente.comprobarVip();
     };
     public bajaPaciente(){
-        let pocision: number = Number(readlineSync.question("Ingrese la pocision del paciente que desea eliminar:"));
-        delete this.listaDePacientes[pocision];
+        let id: number = Number(readlineSync.question("Ingrese la ID del paciente que desea eliminar:"));
+        let idValidada: boolean = false;
+        for(let i = 0; i < this.listaDePacientes.length; i++){
+            if(id === this.listaDePacientes[i].id){
+                idValidada = true;
+                this.listaDePacientes.splice(i,1);
+                console.log("Paciente eliminado del sistema.");
+                break;
+            };
+        };
+        if(idValidada === false){
+            console.log("El ID introducido no existe.");            
+        };
     };
     public modificarPaciente(){
-        let pocision: number = Number(readlineSync.question("Ingrese la pocision del Paciente que desea modificar:"));
-        this.listaDePacientes[pocision].nombre = readlineSync.question("Ingrese el nuevo nombre del paciente: ");
-        let especie: string;
-        let respuesta: string = readlineSync.question("Ingrese la especie del paciente: ");
-        if (respuesta.toLocaleLowerCase() === "perro"){
-            especie = "perro";
-        }
-        else if(respuesta.toLocaleLowerCase() === "gato"){
-            especie = "gato";
-        }
-        else{
-            especie = `exotica (${respuesta})`;
+        let id: number = Number(readlineSync.question("Ingrese el ID del paciente que desea modificar: "));
+        let idValidada: boolean = false;
+        for(let i = 0; i < this.listaDePacientes.length; i++){
+            if(id === this.listaDePacientes[i].id){
+                idValidada = true;
+                this.listaDePacientes[i].nombre = readlineSync.question("Ingrese el nuevo nombre del paciente: ");
+                
+                let especie: string;
+                let respuesta: string = readlineSync.question("Ingrese la especie del paciente: ");
+                if (respuesta.toLocaleLowerCase() === "perro"){
+                    especie = "perro";
+                }
+                else if(respuesta.toLocaleLowerCase() === "gato"){
+                    especie = "gato";
+                }
+                else{
+                    especie = `exotica (${respuesta})`;
+                };
+                this.listaDePacientes[i].especie = especie;
+
+                let respuestaId: string = readlineSync.question("Si desea generar una nueva ID ingrese 'si': ");
+                if (respuestaId.toLocaleLowerCase() === "si"){
+                    this.listaDePacientes[i].id = this.generarIdPaciente();
+                };
+                console.log("Paciente modificado.");
+                break;
+            };
         };
-        this.listaDePacientes[pocision].especie = especie;
+
+        if(idValidada === false){
+            console.log("El ID introducido no existe.");            
+        };
     };
     public verPacientes(){
         for(let i = 0; i < this.listaDePacientes.length; i++){
             if(isNaN(this.listaDePacientes[i].dueno) === false){
-                console.log(`Dueno: ${this.listaDePacientes[i].dueno};  Nombre: ${this.listaDePacientes[i].nombre};  Especie: ${this.listaDePacientes[i].especie}`);
+                console.log(`ID: ${this.listaDePacientes[i].id};   Dueno: ${this.listaDePacientes[i].dueno};  Nombre: ${this.listaDePacientes[i].nombre};  Especie: ${this.listaDePacientes[i].especie}`);
             };
         };
     };
@@ -151,6 +212,29 @@ export default class Sucursal{
         };
         return id;
     };
+    public generarIdPaciente(): number{
+        //el primer 40000 es para asegurarse de que el id empieze en 1
+        let id: number = 40000 + Math.floor(Math.random() * 10000);
+        let idValidada: boolean = false;
+        let idRepetida: boolean;
+        while(idValidada === false){
+            idRepetida = false;
+            for(let i = 0; i < this.listaDePacientes.length; i++){
+                if(id === this.listaDePacientes[i].id){
+                    idRepetida = true;
+                };
+            };
+            if(idRepetida === false){
+                idValidada = true;
+            }
+            else{
+                id = 40000 + Math.floor(Math.random() * 10000);
+            };
+        };
+        return id;
+    };
+
+    //Los siguientes dos metodos son para cargar los clientes y pacientes iniciales
     public cargarClientes(){
         let datos: GestorDeArchivos = new GestorDeArchivos("datosClientes.txt");        
 
@@ -170,11 +254,14 @@ export default class Sucursal{
             let atributosPaciente = datos.getArregloString()[i].split(',')
             let nombre: string = atributosPaciente[0];
             let especie: string = atributosPaciente[1];
-            let IndiceDueno: number = Number(atributosPaciente[2]);
-            let nuevoPaciente = new Paciente(nombre,especie,IndiceDueno);
+            let id: number = this.generarIdPaciente();
+            //el indice es un numero aleatorio dentro del rango del array de clientes para que los pacientes se distribuyan
+            let indice: number = Math.floor(Math.random() * this.listaDeClientes.length);
+            let idDueno: number = this.listaDeClientes[indice].id;
+            let nuevoPaciente = new Paciente(nombre,especie,idDueno,id);
             this.listaDePacientes.push(nuevoPaciente);
-            this.listaDeClientes[IndiceDueno].numeroDeVisitas = this.listaDeClientes[IndiceDueno].numeroDeVisitas + 1;
-            this.listaDeClientes[IndiceDueno].comprobarVip();
+            this.listaDeClientes[indice].numeroDeVisitas = this.listaDeClientes[indice].numeroDeVisitas + 1;
+            this.listaDeClientes[indice].comprobarVip();
             };
     };
 };

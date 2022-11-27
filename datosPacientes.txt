@@ -1,1 +1,1 @@
-Argos,perro,0;nagini,boa,1;Sasha,perro,2;Micho,gato,2
+Argos,perro;Nagini,exotica(boa);Ciri,perro;Micho,gato;Manuelita,exotica(tortuga);Salem,gato;Fenrir,perro;Fatiga,perro;Aslan,gato;Paul,exotico(raton)
