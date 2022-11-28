@@ -1,7 +1,7 @@
 import * as ReadlineSync from 'readline-sync';
 import Sucursal from "./Sucursal";
 import Proovedor from "./Proovedor";
-import GestorDeArchivos from './gestorDeArchivos';
+import GestorDeArchivos from "./gestorDeArchivos";
 
 class Central {
     private listaSucursales:Array<Sucursal>;
@@ -18,9 +18,6 @@ class Central {
     public getListaProovedores(){
     return this.listaProovedores
 }
-
-
-
 
 //FUNCIONES PARA SUCURSALES
 public  cargarSucursales(){
@@ -39,13 +36,21 @@ public  cargarSucursales(){
       };
     
 public bajaSucursal() {
-    for (let i : number =0; i < this.listaSucursales.length; i++){  
-        if (this.generarId() == this.listaSucursales[i].getId()){
-            this.listaSucursales.splice(i, 1);
-            console.log("La sucursal ha sido eliminada");
-        }
-    }
-}
+    let id: number = Number(ReadlineSync.question("Ingrese el ID de la sucursal que desea borrar: "));
+    let idValidada: boolean = false;
+    for(let i = 0; i < this.listaSucursales.length; i++){
+        if(id === this.listaSucursales[i].id){
+            idValidada = true;
+            this.listaSucursales.splice(i,1);
+            console.log("La sucursal ha sido eliminada del sistema.");
+            break;
+        };
+    };
+    if(idValidada === false){
+        console.log("El ID introducido no existe.");            
+    };
+};
+     
 
 public altaSucursal(){
 
@@ -60,17 +65,27 @@ public altaSucursal(){
 
 public modificarSucursal(){
    
-       let posicion: number = Number(ReadlineSync.question("Ingrese la posicion de la sucursal que desea modificar:"));
-       this.listaSucursales[posicion].nombre = ReadlineSync.question("Ingrese el nuevo nombre de la sucursal: ");
-        this.listaSucursales[posicion].direccion = Number(ReadlineSync.question("Ingrese la nueva direccion de la sucursal: "));
-        let respuesta: string = ReadlineSync.question("Si desea generar una nueva ID ingrese 'si': ");
-        if (respuesta.toLocaleLowerCase() === "si"){
-            this.listaSucursales[posicion].id = this.generarId();
-        }
-    };
-     
+       let id: number = Number(ReadlineSync.question("Ingrese la id de la sucursal que desea modificar:"));
+       let idValidada: boolean = false;
+       for(let i = 0; i < this.listaSucursales.length; i++){
+           if(id === this.listaSucursales[i].id){
+               idValidada = true;
+               this.listaSucursales[i].nombre = ReadlineSync.question("Ingrese el nuevo nombre de la sucursal: ");
+               this.listaSucursales[i].direccion = (ReadlineSync.question("Ingrese la nueva direccion: "));
+               let respuesta: string = ReadlineSync.question("Si desea generar una nueva ID ingrese 'si': ");
+               if (respuesta.toLocaleLowerCase() === "si"){
+                   this.listaSucursales[i].id = this.generarId();
+               };
+               console.log("Sucursal modificada");
+               break;
+           };
+       };
+       if(idValidada === false){
+           console.log("El ID introducido no existe.");            
+       };
+   };
 
-    public verSucursal(){
+public verSucursal(){
         console.log(this.listaSucursales)
     };
 
@@ -90,16 +105,24 @@ public cargarProovedores(){
         };
 };
 
-    
 
  public bajaProovedor() {
-    for (let i : number =0; i < this.listaProovedores.length; i++){  
-        if (this.generarId() == this.listaProovedores[i].getId()){
-            this.listaProovedores.splice(i, 1);
-            console.log("El proovedor ha sido eliminado");
-        }
-    }
-}
+    let id: number = Number(ReadlineSync.question("Ingrese el ID del proovedor que desea borrar: "));
+ let idValidada: boolean = false;
+ for(let i = 0; i < this.listaProovedores.length; i++){
+     if(id === this.listaProovedores[i].id){
+         idValidada = true;
+         this.listaProovedores.splice(i,1);
+         console.log("Proovedor eliminado del sistema.");
+         break;
+     };
+ };
+ if(idValidada === false){
+     console.log("El ID introducido no existe.");            
+ };
+};
+
+     
 
 public altaProovedor(){
 
@@ -116,14 +139,27 @@ public verProovedores(){
 }
 
 public modificarProovedor() {
-    let posicion: number = Number(ReadlineSync.question("Ingrese la posicion del prooveedor que desea modificar:"));
-       this.listaProovedores[posicion].nombre = ReadlineSync.question("Ingrese el nuevo nombre del proovedor: ");
-        this.listaProovedores[posicion].telefono = Number(ReadlineSync.question("Ingrese el nuevo telefono del proovedor: "));
+    let id: number = Number(ReadlineSync.question("Ingrese el ID del proovedor que desea modificar: "));
+let idValidada: boolean = false;
+for(let i = 0; i < this.listaProovedores.length; i++){
+    if(id === this.listaProovedores[i].id){
+        idValidada = true;
+        this.listaProovedores[i].nombre = ReadlineSync.question("Ingrese el nuevo nombre del provedor: ");
+        this.listaProovedores[i].telefono = Number(ReadlineSync.question("Ingrese el nuevo telefono del proovedor: "));
         let respuesta: string = ReadlineSync.question("Si desea generar una nueva ID ingrese 'si': ");
         if (respuesta.toLocaleLowerCase() === "si"){
-            this.listaProovedores[posicion].id = this.generarId();
-        }
+            this.listaProovedores[i].id = this.generarId();
+        };
+        console.log("Proovedor modificado.");
+        break;
     };
+};
+if(idValidada === false){
+    console.log("El ID introducido no existe.");            
+};
+};
+
+     
      
 public  generarId(){
     //el primer 10000 es para asegurarse de que el id empieze en 1
@@ -183,3 +219,7 @@ public  ejecutar(){
     };
 };
 };
+let SucursalAyacucho: Sucursal = new Sucursal("Coimbra","San Martin 1230",214124);
+cargarProovedores();
+ ejecutar();
+
