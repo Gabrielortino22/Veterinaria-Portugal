@@ -270,4 +270,3 @@ let SucursalAyacucho: Sucursal = new Sucursal("Coimbra","San Martin 1230",214124
 SucursalAyacucho.cargarClientes();
 SucursalAyacucho.cargarPacientes();
 SucursalAyacucho.ejecutar();
- 
