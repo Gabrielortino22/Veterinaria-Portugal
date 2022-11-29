@@ -181,7 +181,7 @@ var Sucursal = /** @class */ (function () {
     //Este metodo es una especie de menu para llamar otros metodos
     Sucursal.prototype.ejecutar = function () {
         while (this.entrada !== 0) {
-            this.entrada = Number(readlineSync.question("<VETERINARIAS LISBOA> Ingrese un numero para... Clientes: 1 ver, 2 agregar, 3 editar, 4 borrar. Pacientes: 5 ver, 6 agregar, 7 editar, 8 borrar. 0 para salir."));
+            this.entrada = Number(readlineSync.question("<veterinaria ".concat(this.nombre, "> Ingrese un numero para... Clientes: 1 ver, 2 agregar, 3 editar, 4 borrar. Pacientes: 5 ver, 6 agregar, 7 editar, 8 borrar. 0 para salir.")));
             switch (this.entrada) {
                 case 1:
                     this.verClientes();
@@ -305,7 +305,3 @@ var Sucursal = /** @class */ (function () {
 }());
 exports["default"] = Sucursal;
 ;
-var SucursalAyacucho = new Sucursal("Coimbra", "San Martin 1230", 214124);
-SucursalAyacucho.cargarClientes();
-SucursalAyacucho.cargarPacientes();
-SucursalAyacucho.ejecutar();

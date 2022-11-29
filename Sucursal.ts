@@ -4,12 +4,12 @@ import * as readlineSync from 'readline-Sync';
 import GestorDeArchivos from './gestorDeArchivos';
 
 export default class Sucursal{
-    private nombre: string;
-    private direccion: string;
-    private id: number;
-    private listaDeClientes = new Array<Cliente>;
-    private listaDePacientes = new Array<Paciente>;
-    private entrada: number;
+    public nombre: string;
+    public direccion: string;
+    public id: number;
+    public listaDeClientes = new Array<Cliente>;
+    public listaDePacientes = new Array<Paciente>;
+    public entrada: number;
 
     constructor(nombre:string, direccion:string, id:number){
         this.nombre = nombre;
@@ -158,7 +158,7 @@ export default class Sucursal{
     //Este metodo es una especie de menu para llamar otros metodos
     public ejecutar(){
         while(this.entrada !== 0){
-            this.entrada = Number(readlineSync.question("<VETERINARIAS LISBOA> Ingrese un numero para... Clientes: 1 ver, 2 agregar, 3 editar, 4 borrar. Pacientes: 5 ver, 6 agregar, 7 editar, 8 borrar. 0 para salir."));
+            this.entrada = Number(readlineSync.question(`<veterinaria ${this.nombre}> Ingrese un numero para... Clientes: 1 ver, 2 agregar, 3 editar, 4 borrar. Pacientes: 5 ver, 6 agregar, 7 editar, 8 borrar. 0 para salir.`));
             switch (this.entrada){
                 case 1:
                     this.verClientes();
@@ -265,8 +265,3 @@ export default class Sucursal{
             };
     };
 };
-
-let SucursalAyacucho: Sucursal = new Sucursal("Coimbra","San Martin 1230",214124);
-SucursalAyacucho.cargarClientes();
-SucursalAyacucho.cargarPacientes();
-SucursalAyacucho.ejecutar();
