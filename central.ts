@@ -25,7 +25,7 @@ class Central {
               let atributosSucursales = datos.getArregloString()[i].split(',')
               let nombre: string = atributosSucursales[0];
               let direccion:string =atributosSucursales[1];
-              let id: number = this.generarId();
+              let id: number = this.generarIdSucursal();
 
               let nuevaSucursal : Sucursal = new Sucursal(nombre, direccion, id);
             this.listaSucursales.push(nuevaSucursal);
@@ -40,7 +40,7 @@ class Central {
                 idValidada = true;
                 this.listaSucursales.splice(i,1);
                 console.log("La sucursal ha sido eliminada del sistema.");
-                break;
+                break; //corta la busqueda de id cuando ya la encontro
             };
         };
         if(idValidada === false){
@@ -52,14 +52,14 @@ class Central {
     public altaSucursal(){
         let nombre : string = ReadlineSync.question("Ingrese el nombre de la sucursal: ");
         let direccion:string = ReadlineSync.question("Ingrese la direccion de la sucursal:")
-        let id: number = this.generarId();
+        let id: number = this.generarIdSucursal();
         let nuevaSucursal : Sucursal = new Sucursal(nombre, direccion, id);
         this.listaSucursales.push(nuevaSucursal);
     };
 
     public modificarSucursal(){
        let id: number = Number(ReadlineSync.question("Ingrese la id de la sucursal que desea modificar:"));
-       let idValidada: boolean = false;
+       let idValidada: boolean = false;//el valor por defecto es false y si al recorrer el array encuentra que el id coincide cambia el valor a true
        for(let i = 0; i < this.listaSucursales.length; i++){
            if(id === this.listaSucursales[i].id){
                idValidada = true;
@@ -67,7 +67,7 @@ class Central {
                this.listaSucursales[i].direccion = (ReadlineSync.question("Ingrese la nueva direccion: "));
                let respuesta: string = ReadlineSync.question("Si desea generar una nueva ID ingrese 'si': ");
                if (respuesta.toLocaleLowerCase() === "si"){
-                   this.listaSucursales[i].id = this.generarId();
+                   this.listaSucursales[i].id = this.generarIdSucursal();
                };
                console.log("Sucursal modificada");
                break;
@@ -80,12 +80,13 @@ class Central {
 
     public verSucursal(){
         for(let i = 0; i < this.listaSucursales.length; i++){
-            if(isNaN(this.listaSucursales[i].id) === false){
+            if(isNaN(this.listaSucursales[i].id) === false){// es para asegurarse que la id es un numero
                 console.log(`ID: ${this.listaSucursales[i].id};   Nombre Sucursal: ${this.listaSucursales[i].nombre};    Direccion: ${this.listaSucursales[i].direccion}`);
             };
         };
     };
 
+    //El siguiente metodo es un menu para llamar a los demas metodos de la clase sucursal
     public ejecutarSucursal(){
         let id: number = Number(ReadlineSync.question("Ingrese el ID de la sucursal que desea ejecutar: "));
         let idValidada: boolean = false;
@@ -174,9 +175,9 @@ class Central {
 
      
      
-    public  generarId(){
+    public  generarIdSucursal(){
         //el primer 20000 es para asegurarse de que el id empieze en 2
-        let id: number = 20000 + Math.floor(Math.random() * 20000);
+        let id: number = 20000 + Math.floor(Math.random() * 10000);
         let idValidada: boolean = false;
         let idRepetida: boolean;
         while(idValidada === false){
@@ -190,7 +191,7 @@ class Central {
                 idValidada = true;
             }
             else{
-                id = 20000 + Math.floor(Math.random() * 20000);
+                id = 20000 + Math.floor(Math.random() * 10000);
             };
         };
     return id;
@@ -198,7 +199,7 @@ class Central {
 
     public  generarIdProovedor(){
         //el primer 30000 es para asegurarse de que el id empieze en 3
-        let id: number = 30000 + Math.floor(Math.random() * 30000);
+        let id: number = 30000 + Math.floor(Math.random() * 10000);
         let idValidada: boolean = false;
         let idRepetida: boolean;
         while(idValidada === false){
@@ -212,7 +213,7 @@ class Central {
                 idValidada = true;
             }
             else{
-                id = 30000 + Math.floor(Math.random() * 30000);
+                id = 30000 + Math.floor(Math.random() * 10000);
             };
         };
         return id;

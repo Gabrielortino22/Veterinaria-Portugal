@@ -20,7 +20,7 @@ export default class Sucursal{
     public altaCliente(){
         let nombre: string = readlineSync.question("Ingrese el nombre del cliente: ");
         let telefono: number = Number(readlineSync.question("Ingrese el telefono del cliente: "));
-        let id: number = this.generarId();
+        let id: number = this.generarIdCliente();
         let nuevoCliente: Cliente = new Cliente(nombre,telefono,id);
         this.listaDeClientes.push(nuevoCliente);
     };
@@ -49,7 +49,7 @@ export default class Sucursal{
                 this.listaDeClientes[i].telefono = Number(readlineSync.question("Ingrese el nuevo telefono del cliente: "));
                 let respuesta: string = readlineSync.question("Si desea generar una nueva ID ingrese 'si': ");
                 if (respuesta.toLocaleLowerCase() === "si"){
-                    this.listaDeClientes[i].id = this.generarId();
+                    this.listaDeClientes[i].id = this.generarIdCliente();
                 };
                 console.log("Cliente modificado.");
                 break;
@@ -191,7 +191,7 @@ export default class Sucursal{
             };
         };
     };
-    public generarId(): number{
+    public generarIdCliente(): number{
         //el primer 10000 es para asegurarse de que el id empieze en 1
         let id: number = 10000 + Math.floor(Math.random() * 10000);
         let idValidada: boolean = false;
@@ -242,7 +242,7 @@ export default class Sucursal{
             let atributosCliente = datos.getArregloString()[i].split(',')
             let nombre: string = atributosCliente[0];
             let telefono: number = Number(atributosCliente[1]);
-            let id: number = this.generarId();
+            let id: number = this.generarIdCliente();
             let nuevoCliente = new Cliente(nombre,telefono,id);
             this.listaDeClientes.push(nuevoCliente);
             };
